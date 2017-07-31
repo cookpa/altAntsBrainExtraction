@@ -1,13 +1,16 @@
 # altAntsBrainExtraction
 Brain extraction loosely based on antsBrainExtraction.sh, but with different defaults and options
 
+Run the scripts with no args to see usage.
+
+Define ANTSPATH before calling the scripts.
 
 
 ## antsBrainExtraction.sh
 
 The `antsBrainExtraction.sh` script does a two-stage brain extraction by first registering the input image to a template, dilating the resulting brain mask, and using segmentation to find additional voxels to include in the mask.
 
-Here's a summary of the processing steps I made after reading through the script. Note steps here don't correspond to "supersteps" in script.
+Here's a summary of the processing steps I made after reading through the script. The numbered steps here don't correspond to the commented step numbers in the script.
 
 
 ## antsBrainExtraction.sh processing overview (using default parameters)
