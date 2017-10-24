@@ -39,9 +39,6 @@ my $usage = qq{
   
   Options:
 
-     --bias-correct
-       Run N4 on the image using the initial mask (default = 1).
-
      --erosion-radius 
        Voxel radius for erosion of the initial mask. Voxels within the eroded mask always remain within the final 
        brain mask (default = 0).
