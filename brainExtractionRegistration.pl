@@ -75,6 +75,9 @@ my $usage = qq{
      --quick
        Reduces iterations to produce a faster result (default = 0).
 
+     --save-transforms
+       Save the transforms from registration, useful for debugging failures (default = 0).
+
   Requires ANTSPATH
 
 };
@@ -108,6 +111,7 @@ my $laplacianSigma = 0;
 my @segPriors = ();
 my $useFloatPrecision = 0;
 my $quick = 0;
+my $saveTransforms = 0;
 
 GetOptions ("input=s" => \$inputHead,
 	    "output-root=s" => \$outputRoot,
@@ -119,7 +123,8 @@ GetOptions ("input=s" => \$inputHead,
 	    "laplacian-sigma=f" => \$laplacianSigma,
 	    "seg-priors=s{1,}" => \@segPriors,
 	    "float=i" => \$useFloatPrecision,
-            "quick=i" => \$quick
+            "quick=i" => \$quick,
+            "save-transforms=i" => \$saveTransforms
     )
     or die("Error in command line arguments\n");
 
@@ -143,7 +148,7 @@ if (! -d $outputDir ) {
 }
 
 # Set to 1 to delete intermediate files after we're done
-my $cleanup=1;
+my $cleanup=0;
 
 # Directory for temporary files that is deleted later if $cleanup
 my $tmpDir = "";
@@ -214,7 +219,7 @@ print "\n--- ANTs AI ---\n${antsAICmd}\n---\n";
 
 system($antsAICmd);
 
-my $warpPrefix = " ${tmpDir}/headToTemplate";
+my $warpPrefix = "${tmpDir}/headToTemplate";
 
 my $affineRegMaskString = "";
 
@@ -348,6 +353,14 @@ if (scalar(@segPriors) > 0) {
 	system("${antsPath}antsApplyTransforms -d 3 -i $prior -r $headImage -t [${warpPrefix}0GenericAffine.mat, 1] -t ${warpPrefix}1InverseWarp.nii.gz -n Gaussian -o ${outputRoot}SegPrior${priorClass}.nii.gz --float $useFloatPrecision --verbose");
     }
 
+}
+
+# Optionally save transforms
+if ($saveTransforms) {
+    copy($initialAffine, "${outputRoot}ToTemplateInitialTransform.mat");
+    copy("${warpPrefix}0GenericAffine.mat", "${outputRoot}ToTemplate0GenericAffine.mat");
+    copy("${warpPrefix}1Warp.nii.gz", "${outputRoot}ToTemplate1Warp.nii.gz");
+    copy("${warpPrefix}1InverseWarp.nii.gz", "${outputRoot}ToTemplate1InverseWarp.nii.gz");
 }
 
 
