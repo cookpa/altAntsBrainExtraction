@@ -89,14 +89,12 @@ Processing steps like "FillHoles" and "addtozero" are `ImageMath` operations.
 
 ## New scripts
 
-The two scripts `brainExtractionRegistration.pl` and `brainExtractionSegmentation.pl` are designed to separarely handle the registration and segmentation components of the brain extraction. This allows the user to better locate where brain extraction is working well or might be improved by altering parameters.
+The two scripts `brainExtractionRegistration.pl` and `brainExtractionSegmentation.pl` are designed to separately handle the registration and segmentation components of the brain extraction. This allows the user to better locate where brain extraction is working well or might be improved by altering parameters.
 
 
 ## antsBrainExtractionRegistration.pl processing overview
 
 There are multiple implementation details that differ between the two scripts, but the main new features are
-
-* Call `antsAI` to define only a rigid initial transform, rather than a full affine.
 
 * Deformable registration begins with a regularized SyN step, using only the grayscale images (no Laplacian) at shrink factors 6x4. The reasoning being that the Laplacian is most useful for edge alignment at finer scales. The regularization attempts to prevent large local deformations that often pulls extra material into the brain mask region.
 
