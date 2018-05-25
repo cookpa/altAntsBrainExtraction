@@ -206,7 +206,7 @@ my $initialAffine = "${tmpDir}/initialAffine.mat";
 # searchFactor = step size
 # arcFraction = fraction of arc to search 1 = +/- 180 degrees, 0.5 = +/- 90 degrees
 #
-my $antsAICmd = "${antsPath}antsAI -d 3 -v 1 -m Mattes[$downsampleTemplate, $downsampleHeadImage, 32, Regular, 0.2] -t Affine[0.1] -s [20, 0.12] -c 10 -g [0x40x40, 40] -o $initialAffine";
+my $antsAICmd = "${antsPath}antsAI -d 3 -v 1 -m Mattes[$downsampleTemplate, $downsampleHeadImage, 32, Regular, 0.2] -t Affine[0.1] -s [20, 0.12] -c 10 -g [40, 0x40x40] -o $initialAffine";
 
 if ($useTemplateRegMask) {
 
