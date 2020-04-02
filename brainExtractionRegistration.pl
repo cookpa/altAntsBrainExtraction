@@ -341,7 +341,7 @@ system("${antsPath}antsApplyTransforms -d 3 -r $headImage -i $templateBrainMask 
 
 system("${antsPath}ThresholdImage 3 $brainMaskFromReg $brainMaskFromReg 0.5 Inf");
 
-copy($brainMaskFromReg, "${outputRoot}BrainMask.nii.gz");
+system("${antsPath}CopyImageHeaderInformation $inputHead $brainMaskFromReg ${outputRoot}BrainMask.nii.gz 1 1 1");
 
 # If we have priors, warp those too
 if (scalar(@segPriors) > 0) {
@@ -352,6 +352,8 @@ if (scalar(@segPriors) > 0) {
 	my $priorClass = $1;
 
 	system("${antsPath}antsApplyTransforms -d 3 -i $prior -r $headImage -t [${warpPrefix}0GenericAffine.mat, 1] -t ${warpPrefix}1InverseWarp.nii.gz -n Gaussian -o ${outputRoot}SegPrior${priorClass}.nii.gz --float $useFloatPrecision --verbose");
+
+        system("${antsPath}CopyImageHeaderInformation $inputHead ${outputRoot}SegPrior${priorClass}.nii.gz ${outputRoot}SegPrior${priorClass}.nii.gz 1 1 1");
     }
 
 }
