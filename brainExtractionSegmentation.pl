@@ -215,11 +215,11 @@ my $brainMaskDilated = "${tmpDir}/brainMaskDilated.nii.gz";
 
 # Dilate the initial mask, this forms the maximal possible mask
 system("${antsPath}ImageMath 3 $brainMaskDilated MD $initialBrainMaskPad $dilationRadius");
+system("${antsPath}CopyImageHeaderInformation $initialBrainMask $brainMaskDilated $brainMaskDilated 1 1 1");
 
 if ($doN4) {
     # Bright voxels within initial mask can sometimes cause N4 problems, but don't want to compress actual contrast
-    # After initial brain masking, most of the brightest voxels should be gone
-    # system("${antsPath}ImageMath 3 $headImage TruncateImageIntensity $headImage 0.0 0.999 256 $brainMaskDilated");
+    # After initial brain masking, most of the brightest voxels should be outside the mask
     system("${antsPath}N4BiasFieldCorrection -d 3 -i $headImage -s 3 -c [50x50x50x50,0.0000001] -b [200] -x $brainMaskDilated -o $headImage --verbose 1");
 }
 
@@ -332,7 +332,8 @@ system("${antsPath}ImageMath 3 $extractedBrain m $headImage $brainMaskPad");
 system("${antsPath}ImageMath 3 ${outputRoot}BrainMask.nii.gz PadImage $brainMaskPad -${padVoxels}");
 system("${antsPath}ImageMath 3 ${outputRoot}ExtractedBrain.nii.gz PadImage $extractedBrain -${padVoxels}");
 
-
+system("${antsPath}CopyImageHeaderInformation $inputHead ${outputRoot}BrainMask.nii.gz ${outputRoot}BrainMask.nii.gz 1 1 1");
+system("${antsPath}CopyImageHeaderInformation $inputHead ${outputRoot}ExtractedBrain.nii.gz ${outputRoot}ExtractedBrain.nii.gz 1 1 1");
 
 
 # cleanup
