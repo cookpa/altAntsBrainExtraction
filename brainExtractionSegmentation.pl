@@ -215,7 +215,6 @@ my $brainMaskDilated = "${tmpDir}/brainMaskDilated.nii.gz";
 
 # Dilate the initial mask, this forms the maximal possible mask
 system("${antsPath}ImageMath 3 $brainMaskDilated MD $initialBrainMaskPad $dilationRadius");
-system("${antsPath}CopyImageHeaderInformation $initialBrainMask $brainMaskDilated $brainMaskDilated 1 1 1");
 
 if ($doN4) {
     # Bright voxels within initial mask can sometimes cause N4 problems, but don't want to compress actual contrast
